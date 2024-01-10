@@ -1,5 +1,6 @@
 package com.mehdi.socialmedia.service;
 
+import com.mehdi.socialmedia.config.JwtProvider;
 import com.mehdi.socialmedia.models.User;
 import com.mehdi.socialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,5 +86,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> searchUser(String query) {
         return userRepository.searchUser(query);
+    }
+
+    @Override
+    public User findUserByJwt(String jwt) {
+        String email = JwtProvider.getEmailFromJwtToken(jwt);
+
+        User user = userRepository.findByEmail(email);
+        return user;
     }
 }

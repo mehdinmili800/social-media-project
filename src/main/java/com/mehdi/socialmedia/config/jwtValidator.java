@@ -1,5 +1,6 @@
 package com.mehdi.socialmedia.config;
 
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,33 +12,32 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class jwtValidator extends OncePerRequestFilter {
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+        String jwt=request.getHeader(JwtConstant.JWT_HEADER);
 
-        if (jwt != null){
+        if (jwt!=null){
+
             try {
-                String email= JwtProvider.getEmailFromJwtToken(jwt);
+                String email=JwtProvider.getEmailFromJwtToken(jwt);
+                List<GrantedAuthority> authorities=new ArrayList<>();
 
-                List<GrantedAuthority>authorities =new ArrayList<>();
-                Authentication authentication = new UsernamePasswordAuthenticationToken(email,null,authorities);
+                Authentication authentication= new UsernamePasswordAuthenticationToken(email,null,authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
             }catch (Exception e){
-                throw  new BadCredentialsException("invalid token ....");
+                throw new BadCredentialsException("invalid token ....");
+
             }
         }
-
-       filterChain.doFilter(request,response);
-
+        filterChain.doFilter(request,response);
     }
 }
-
-
