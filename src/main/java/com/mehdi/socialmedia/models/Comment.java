@@ -1,6 +1,5 @@
 package com.mehdi.socialmedia.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,34 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "post")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  Integer id;
+    private Integer id;
 
-    private String caption;
-    private String image;
-    private String video;
-
+    private String content;
 
     @ManyToOne
     private User user;
 
-    @OneToMany
-    private List<User> liked=new ArrayList<>();
+    @ManyToMany
+    private List<User> liked = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
-    @OneToMany
-    private List<Comment> comments = new ArrayList<>();
-
-
-    //book
 
 }
